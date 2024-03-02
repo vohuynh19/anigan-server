@@ -61,9 +61,9 @@ def process_images(source_img_path: str, reference_img_path: str):
         firebase_admin.initialize_app(firebase_cred, {
             'storageBucket': 'xetpasta.appspot.com'
         })
-        bucket = storage.bucket("image")
+        bucket = storage.bucket()
         unique_id = str(uuid.uuid4())
-        blob = bucket.blob("output123.png")
+        blob = bucket.blob(f"processed/{unique_id}.png")
         blob.upload_from_filename(save_file_path)
         firebase_url = blob.public_url
         print(f"Image uploaded to Firebase: {firebase_url}")
