@@ -11,6 +11,7 @@ from torchvision.utils import save_image
 
 from anigan.trainer import Trainer
 from anigan.utils import get_config
+from colabcode import ColabCode
 
 app = FastAPI()
 
@@ -51,3 +52,5 @@ def process_images(source_img_path: str, reference_img_path: str):
         save_image(_denorm(generated_img), save_file_path, nrow=1, padding=0)
         print(f"Result is saved to: {save_file_path}")
         return {"output": save_file_path}
+
+cc = ColabCode(port=12000, code=False)

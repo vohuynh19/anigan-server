@@ -814,13 +814,13 @@ class Decoder_up(nn.Module):
         self.norm_type = 'siln'
 
         for i in range(n_res):
-            if self.norm_type is 'siln':
+            if self.norm_type == 'siln':
                 if not self.res:
                     setattr(self, 'AdaSILNBlock_' + str(i + 1), AdaSILNBlock(dim, use_bias=False))
                 else:
                     setattr(self, 'AdaSILNBlock_' + str(i + 1), ResnetAdaSILNBlock(dim, use_bias=False))
 
-            elif self.norm_type is 'iln':
+            elif self.norm_type == 'iln':
                 if not self.res:
                     setattr(self, 'AdaSILNBlock_' + str(i + 1), AdaILNBlock(dim, use_bias=False))
                 else:
@@ -841,9 +841,9 @@ class Decoder_up(nn.Module):
                                      Conv2dBlock(dim//2, dim // 2, 5, 1, 2, norm='none', activation='none', pad_type=pad_type)]
                 else:
                     self.model_1 += [Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='none', activation='none', pad_type=pad_type)]
-                if self.norm_type is 'siln':
+                if self.norm_type == 'siln':
                     self.adaptive_norm_1 = adaSILN(dim//2)
-                elif self.norm_type is 'iln':
+                elif self.norm_type == 'iln':
                     self.adaptive_norm_1 = adaILN(dim//2)
                 else:
                     self.adaptive_norm_1 = adaIN(dim//2)
@@ -857,9 +857,9 @@ class Decoder_up(nn.Module):
                                      Conv2dBlock(dim//2, dim // 2, 5, 1, 2, norm='none', activation='none', pad_type=pad_type)]
                 else:
                     self.model_2 += [Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='none', activation='none', pad_type=pad_type)]
-                if self.norm_type is 'siln':
+                if self.norm_type == 'siln':
                     self.adaptive_norm_2 = adaSILN(dim // 2)
-                elif self.norm_type is 'iln':
+                elif self.norm_type == 'iln':
                     self.adaptive_norm_2 = adaILN(dim // 2)
                 else:
                     self.adaptive_norm_2 = adaIN(dim // 2)
@@ -873,9 +873,9 @@ class Decoder_up(nn.Module):
                                      Conv2dBlock(dim//2, dim // 2, 5, 1, 2, norm='none', activation='none', pad_type=pad_type)]
                 else:
                     self.model_3 += [Conv2dBlock(dim, dim // 2, 5, 1, 2, norm='none', activation='none', pad_type=pad_type)]
-                if self.norm_type is 'siln':
+                if self.norm_type == 'siln':
                     self.adaptive_norm_3 = adaSILN(dim // 2)
-                elif self.norm_type is 'iln':
+                elif self.norm_type == 'iln':
                     self.adaptive_norm_3 = adaILN(dim // 2)
                 else:
                     self.adaptive_norm_3 = adaIN(dim // 2)
