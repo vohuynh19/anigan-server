@@ -64,9 +64,10 @@ def process_images(source_img_path: str, reference_img_path: str):
         bucket = storage.bucket()
         unique_id = str(uuid.uuid4())
         path = f"processed/{unique_id}.png"
+        quoted_path = urllib.parse.quote(path, safe='')
         blob = bucket.blob(path)
         blob.upload_from_filename(save_file_path)
-        firebase_url =  f"https://firebasestorage.googleapis.com/v0/b/{bucket.name}/o/${path}?alt=media"
+        firebase_url =  f"https://firebasestorage.googleapis.com/v0/b/{bucket.name}/o/{quoted_path}?alt=media"
         print(f"Image uploaded to Firebase: {firebase_url}")
         return {
             "processed_url" : firebase_url
