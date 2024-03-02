@@ -12,7 +12,6 @@ from torchvision.utils import save_image
 
 from anigan.trainer import Trainer
 from anigan.utils import get_config
-from colabcode import ColabCode
 
 import firebase_admin
 from firebase_admin import credentials

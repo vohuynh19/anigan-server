@@ -63,7 +63,7 @@ def process_images(source_img_path: str, reference_img_path: str):
         })
         bucket = storage.bucket("image")
         unique_id = str(uuid.uuid4())
-        blob = bucket.blob(f"processed/{unique_id}.png")
+        blob = bucket.blob("output123.png")
         blob.upload_from_filename(save_file_path)
         firebase_url = blob.public_url
         print(f"Image uploaded to Firebase: {firebase_url}")
