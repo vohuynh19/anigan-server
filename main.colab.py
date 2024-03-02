@@ -67,6 +67,9 @@ def process_images(source_img_path: str, reference_img_path: str):
         blob.upload_from_filename(save_file_path)
         firebase_url = blob.public_url
         print(f"Image uploaded to Firebase: {firebase_url}")
+        return {
+            "processed_url" : firebase_url
+        }
     
 cc = ColabCode(port=12000, code=False)
 cc.run_app(app=app)
