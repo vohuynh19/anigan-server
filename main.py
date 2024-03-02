@@ -42,7 +42,7 @@ def _denorm(x):
 def read_root():
     return {"Name": "I am Anigan server"}
 
-@app.get("/process-images")
+@app.post("/process-images")
 def process_images(source_img_path: str, reference_img_path: str):
     # Add your image processing logic here
     source_img = Image.open(BytesIO(requests.get(source_img_path).content)).convert('RGB')
