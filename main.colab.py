@@ -2,6 +2,7 @@ import os
 import requests
 import torch
 import uuid
+import urllib.parse
 
 from io import BytesIO
 from fastapi import FastAPI
