@@ -13,6 +13,10 @@ from anigan.trainer import Trainer
 from anigan.utils import get_config
 from colabcode import ColabCode
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import storage
+
 app = FastAPI()
 
 config_file = 'anigan/configs/try4_final_r1p2.yaml'
@@ -51,6 +55,16 @@ def process_images(source_img_path: str, reference_img_path: str):
         save_file_path = os.path.join(output_dir, f"output.png")
         save_image(_denorm(generated_img), save_file_path, nrow=1, padding=0)
         print(f"Result is saved to: {save_file_path}")
-        return {"output": save_file_path}
-
+        # Upload the image to Firebase Storage
+        firebase_cred = credentials.Certificate('adminSdk.json')
+        firebase_admin.initialize_app(firebase_cred, {
+            'storageBucket': 'xetpasta.appspot.com'
+        })
+        bucket = storage.bucket()
+        blob = bucket.blob("output.png")
+        blob.upload_from_filename(save_file_path)
+        firebase_path = f"https://firebasestorage.googleapis.com/v0/b/{bucket.name}/o/output.png?alt=media"
+        print(f"Image uploaded to Firebase: {firebase_path}")
+        return {"generated_url": firebase_path}
+    
 cc = ColabCode(port=12000, code=False)
