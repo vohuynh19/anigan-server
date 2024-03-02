@@ -68,3 +68,4 @@ def process_images(source_img_path: str, reference_img_path: str):
         return {"generated_url": firebase_path}
     
 cc = ColabCode(port=12000, code=False)
+cc.run_app(app=app)
