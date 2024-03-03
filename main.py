@@ -33,6 +33,12 @@ transform_list = [
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ]
 transform = transforms.Compose(transform_list)
+firebase_cred = credentials.Certificate('adminSdk.json')
+firebase_admin.initialize_app(firebase_cred, {
+    'storageBucket': 'xetpasta.appspot.com'
+})
+bucket = storage.bucket()
+        
 def _denorm(x):
     """Convert the range from [-1, 1] to [0, 1]."""
     out = (x + 1) / 2
@@ -57,11 +63,6 @@ def process_images(source_img_path: str, reference_img_path: str):
         save_image(_denorm(generated_img), save_file_path, nrow=1, padding=0)
         print(f"Result is saved to: {save_file_path}")
         # Upload the image to Firebase Storage
-        firebase_cred = credentials.Certificate('adminSdk.json')
-        firebase_admin.initialize_app(firebase_cred, {
-            'storageBucket': 'xetpasta.appspot.com'
-        })
-        bucket = storage.bucket()
         unique_id = str(uuid.uuid4())
         path = f"processed/{unique_id}.png"
         quoted_path = urllib.parse.quote(path, safe='')

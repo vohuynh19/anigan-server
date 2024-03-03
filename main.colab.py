@@ -42,7 +42,12 @@ def _denorm(x):
 @app.get("/")
 def read_root():
     return {"Name": "I am Anigan server"}
-
+firebase_cred = credentials.Certificate('adminSdk.json')
+firebase_admin.initialize_app(firebase_cred, {
+    'storageBucket': 'xetpasta.appspot.com'
+})
+bucket = storage.bucket()
+        
 @app.post("/process-images")
 def process_images(source_img_path: str, reference_img_path: str):
     # Add your image processing logic here
@@ -58,11 +63,6 @@ def process_images(source_img_path: str, reference_img_path: str):
         save_image(_denorm(generated_img), save_file_path, nrow=1, padding=0)
         print(f"Result is saved to: {save_file_path}")
         # Upload the image to Firebase Storage
-        firebase_cred = credentials.Certificate('adminSdk.json')
-        firebase_admin.initialize_app(firebase_cred, {
-            'storageBucket': 'xetpasta.appspot.com'
-        })
-        bucket = storage.bucket()
         unique_id = str(uuid.uuid4())
         path = f"processed/{unique_id}.png"
         quoted_path = urllib.parse.quote(path, safe='')
