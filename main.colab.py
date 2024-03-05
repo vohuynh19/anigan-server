@@ -7,13 +7,13 @@ import urllib.parse
 from io import BytesIO
 from fastapi import FastAPI
 from PIL import Image
+from pydantic import BaseModel
 
 from torchvision import transforms
 from torchvision.utils import save_image
 
 from anigan.trainer import Trainer
 from anigan.utils import get_config
-from colabcode import ColabCode
 
 import firebase_admin
 from firebase_admin import credentials
@@ -34,6 +34,12 @@ transform_list = [
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ]
 transform = transforms.Compose(transform_list)
+firebase_cred = credentials.Certificate('adminSdk.json')
+firebase_admin.initialize_app(firebase_cred, {
+    'storageBucket': 'xetpasta.appspot.com'
+})
+bucket = storage.bucket()
+        
 def _denorm(x):
     """Convert the range from [-1, 1] to [0, 1]."""
     out = (x + 1) / 2
@@ -42,17 +48,16 @@ def _denorm(x):
 @app.get("/")
 def read_root():
     return {"Name": "I am Anigan server"}
-firebase_cred = credentials.Certificate('adminSdk.json')
-firebase_admin.initialize_app(firebase_cred, {
-    'storageBucket': 'xetpasta.appspot.com'
-})
-bucket = storage.bucket()
-        
+
+class ProcessImageData(BaseModel):
+    source_img_path: str
+    reference_img_path: str
+
 @app.post("/process-images")
-def process_images(source_img_path: str, reference_img_path: str):
+def process_images(data: ProcessImageData):
     # Add your image processing logic here
-    source_img = Image.open(BytesIO(requests.get(source_img_path).content)).convert('RGB')
-    reference_img = Image.open(BytesIO(requests.get(reference_img_path).content)).convert('RGB')
+    source_img = Image.open(BytesIO(requests.get(data.source_img_path).content)).convert('RGB')
+    reference_img = Image.open(BytesIO(requests.get(data.reference_img_path).content)).convert('RGB')
     content_tensor = transform(source_img).unsqueeze(0).cuda()
     reference_tensor = transform(reference_img).unsqueeze(0).cuda()
     output_dir = "result_dir"
