@@ -87,6 +87,13 @@ modelV2 = torch.hub.load("AK391/animegan2-pytorch:main", "generator", pretrained
 
 class ProcessImageDataV2(BaseModel):
     source_img_path: str
+    
+def postprocess_image(image):
+    image = image.squeeze(0)
+    image = image.detach().cpu()
+    image = (image + 1) / 2  # Denormalize the image
+    image = transforms.ToPILImage()(image)
+    return image
 
 @app.post("/v2/process-images")
 def process_images(data: ProcessImageDataV2):
@@ -94,7 +101,7 @@ def process_images(data: ProcessImageDataV2):
     
     input_image = Image.open(BytesIO(requests.get(data.source_img_path).content)).convert('RGB')
     
-    target_width = 1024
+    target_width = 512
 
     # Calculate the target height based on the original aspect ratio
     original_width, original_height = input_image.size
@@ -117,9 +124,7 @@ def process_images(data: ProcessImageDataV2):
         output_tensor = modelV2(input_tensor)
         
     save_file_path = os.path.join(output_dir, f"output.png")
-    output_image = output_tensor.detach().cpu().squeeze(0).permute(1, 2, 0).numpy()
-    output_image = (output_image * 255.0).clip(0, 255).astype(np.uint8)
-    output_image = Image.fromarray(output_image)
+    output_image = postprocess_image(output_tensor)
     output_image.save(save_file_path)
     print(f"Result is saved to: {save_file_path}")
     # Upload to firebase
