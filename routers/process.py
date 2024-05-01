@@ -50,7 +50,7 @@ def process_images(data: ProcessImageDataV2):
     ]
 
     transform = transforms.Compose(transform_list)
-    input_tensor = transform(input_image).unsqueeze(0).cuda()
+    input_tensor = transform(input_image).unsqueeze(0).cpu()
     
     
     output_dir = "result_dir"
