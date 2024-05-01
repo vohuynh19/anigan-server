@@ -1,8 +1,7 @@
-torch 
-torchvision 
-PyYAML 
-requests 
-fastapi 
-colabcode 
-uuid 
+torch==2.3.0
+torchvision==0.18.0
+PyYAML==6.0.1
+requests==2.31.0
+fastapi==0.109.2
+uuid==1.30
 firebase_admin
