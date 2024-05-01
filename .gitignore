@@ -37,3 +37,5 @@ adminSdk.json
 # pytorch model
 *.pt
 *.ptl
+
+result_dir/*
