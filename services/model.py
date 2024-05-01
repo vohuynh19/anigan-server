@@ -13,5 +13,6 @@ class ModelManager:
         if ModelManager.__instance is not None:
             raise Exception("ModelManager is a singleton class. Use get_instance() method to get its instance.")
         else:
+            torch.hub._validate_not_a_forked_repo=lambda a,b,c: True
             self.modelV2 = torch.hub.load("AK391/animegan2-pytorch:main", "generator", pretrained=True, device="cpu", progress=False)
             ModelManager.__instance = self
