@@ -1,0 +1,8 @@
+torch 
+torchvision 
+PyYAML 
+requests 
+fastapi 
+colabcode 
+uuid 
+firebase_admin

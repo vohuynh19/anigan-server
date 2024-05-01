@@ -30,3 +30,10 @@ archive.zip
 .DS_Store
 
 *.pt
+
+# firebase
+adminSdk.json
+
+# pytorch model
+*.pt
+*.ptl
